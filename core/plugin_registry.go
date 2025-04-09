@@ -3,6 +3,8 @@ package core
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/samber/lo"
@@ -12,6 +14,7 @@ import (
 	"github.com/danielmiessler/fabric/plugins/ai"
 	"github.com/danielmiessler/fabric/plugins/ai/anthropic"
 	"github.com/danielmiessler/fabric/plugins/ai/azure"
+	"github.com/danielmiessler/fabric/plugins/ai/deepseek"
 	"github.com/danielmiessler/fabric/plugins/ai/dryrun"
 	"github.com/danielmiessler/fabric/plugins/ai/gemini"
 	"github.com/danielmiessler/fabric/plugins/ai/groq"
@@ -21,13 +24,14 @@ import (
 	"github.com/danielmiessler/fabric/plugins/ai/openrouter"
 	"github.com/danielmiessler/fabric/plugins/ai/siliconcloud"
 	"github.com/danielmiessler/fabric/plugins/db/fsdb"
+	"github.com/danielmiessler/fabric/plugins/template"
 	"github.com/danielmiessler/fabric/plugins/tools"
 	"github.com/danielmiessler/fabric/plugins/tools/jina"
 	"github.com/danielmiessler/fabric/plugins/tools/lang"
 	"github.com/danielmiessler/fabric/plugins/tools/youtube"
 )
 
-func NewPluginRegistry(db *fsdb.Db) (ret *PluginRegistry) {
+func NewPluginRegistry(db *fsdb.Db) (ret *PluginRegistry, err error) {
 	ret = &PluginRegistry{
 		Db:             db,
 		VendorManager:  ai.NewVendorsManager(),
@@ -38,13 +42,19 @@ func NewPluginRegistry(db *fsdb.Db) (ret *PluginRegistry) {
 		Jina:           jina.NewClient(),
 	}
 
+	var homedir string
+	if homedir, err = os.UserHomeDir(); err != nil {
+		return
+	}
+	ret.TemplateExtensions = template.NewExtensionManager(filepath.Join(homedir, ".config/fabric"))
+
 	ret.Defaults = tools.NeeDefaults(ret.GetModels)
 
 	ret.VendorsAll.AddVendors(openai.NewClient(), ollama.NewClient(), azure.NewClient(), groq.NewClient(),
 		gemini.NewClient(),
 		//gemini_openai.NewClient(),
 		anthropic.NewClient(), siliconcloud.NewClient(),
-		openrouter.NewClient(), mistral.NewClient())
+		openrouter.NewClient(), mistral.NewClient(), deepseek.NewClient())
 	_ = ret.Configure()
 
 	return
@@ -53,13 +63,14 @@ func NewPluginRegistry(db *fsdb.Db) (ret *PluginRegistry) {
 type PluginRegistry struct {
 	Db *fsdb.Db
 
-	VendorManager  *ai.VendorsManager
-	VendorsAll     *ai.VendorsManager
-	Defaults       *tools.Defaults
-	PatternsLoader *tools.PatternsLoader
-	YouTube        *youtube.YouTube
-	Language       *lang.Language
-	Jina           *jina.Client
+	VendorManager      *ai.VendorsManager
+	VendorsAll         *ai.VendorsManager
+	Defaults           *tools.Defaults
+	PatternsLoader     *tools.PatternsLoader
+	YouTube            *youtube.YouTube
+	Language           *lang.Language
+	Jina               *jina.Client
+	TemplateExtensions *template.ExtensionManager
 }
 
 func (o *PluginRegistry) SaveEnvFile() (err error) {
