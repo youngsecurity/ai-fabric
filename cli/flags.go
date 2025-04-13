@@ -10,12 +10,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/danielmiessler/fabric/common"
 	"github.com/jessevdk/go-flags"
 	goopenai "github.com/sashabaranov/go-openai"
 	"golang.org/x/text/language"
 	"gopkg.in/yaml.v2"
-
-	"github.com/danielmiessler/fabric/common"
 )
 
 // Flags create flags struct. the users flags go into this, this will be passed to the chat struct in cli
@@ -65,11 +64,14 @@ type Flags struct {
 	Serve                           bool              `long:"serve" description:"Serve the Fabric Rest API"`
 	ServeOllama                     bool              `long:"serveOllama" description:"Serve the Fabric Rest API with ollama endpoints"`
 	ServeAddress                    string            `long:"address" description:"The address to bind the REST API" default:":8080"`
+	ServeAPIKey                     string            `long:"api-key" description:"API key used to secure server routes" default:""`
 	Config                          string            `long:"config" description:"Path to YAML config file"`
 	Version                         bool              `long:"version" description:"Print current version"`
 	ListExtensions                  bool              `long:"listextensions" description:"List all registered extensions"`
 	AddExtension                    string            `long:"addextension" description:"Register a new extension from config file path"`
 	RemoveExtension                 string            `long:"rmextension" description:"Remove a registered extension by name"`
+	Strategy                        string            `long:"strategy" description:"Choose a strategy from the available strategies" default:""`
+	ListStrategies                  bool              `long:"liststrategies" description:"List all strategies"`
 }
 
 var debug = false
@@ -115,14 +117,14 @@ func Init() (ret *Flags, err error) {
 	parser := flags.NewParser(ret, flags.Default)
 	var args []string
 	if args, err = parser.Parse(); err != nil {
-		return nil, err
+		return
 	}
 
 	// If config specified, load and apply YAML for unused flags
 	if ret.Config != "" {
-		yamlFlags, err := loadYAMLConfig(ret.Config)
-		if err != nil {
-			return nil, err
+		var yamlFlags *Flags
+		if yamlFlags, err = loadYAMLConfig(ret.Config); err != nil {
+			return
 		}
 
 		// Apply YAML values where CLI flags weren't used
@@ -153,6 +155,7 @@ func Init() (ret *Flags, err error) {
 	}
 
 	// Handle stdin and messages
+	// Handle stdin and messages
 	info, _ := os.Stdin.Stat()
 	pipedToStdin := (info.Mode() & os.ModeCharDevice) == 0
 
@@ -168,8 +171,7 @@ func Init() (ret *Flags, err error) {
 		}
 		ret.Message = AppendMessage(ret.Message, pipedMessage)
 	}
-
-	return ret, nil
+	return
 }
 
 func assignWithConversion(targetField, sourceField reflect.Value) error {
@@ -235,17 +237,19 @@ func readStdin() (ret string, err error) {
 	reader := bufio.NewReader(os.Stdin)
 	var sb strings.Builder
 	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if errors.Is(err, io.EOF) {
+		if line, readErr := reader.ReadString('\n'); readErr != nil {
+			if errors.Is(readErr, io.EOF) {
 				sb.WriteString(line)
 				break
 			}
-			return "", fmt.Errorf("error reading piped message from stdin: %w", err)
+			err = fmt.Errorf("error reading piped message from stdin: %w", readErr)
+			return
+		} else {
+			sb.WriteString(line)
 		}
-		sb.WriteString(line)
 	}
-	return sb.String(), nil
+	ret = sb.String()
+	return
 }
 
 func (o *Flags) BuildChatOptions() (ret *common.ChatOptions) {
@@ -266,13 +270,14 @@ func (o *Flags) BuildChatRequest(Meta string) (ret *common.ChatRequest, err erro
 		ContextName:      o.Context,
 		SessionName:      o.Session,
 		PatternName:      o.Pattern,
+		StrategyName:     o.Strategy,
 		PatternVariables: o.PatternVariables,
 		InputHasVars:     o.InputHasVars,
 		Meta:             Meta,
 	}
 
 	var message *goopenai.ChatCompletionMessage
-	if o.Attachments == nil || len(o.Attachments) == 0 {
+	if len(o.Attachments) == 0 {
 		if o.Message != "" {
 			message = &goopenai.ChatCompletionMessage{
 				Role:    goopenai.ChatMessageRoleUser,

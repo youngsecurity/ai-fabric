@@ -1,12 +1,13 @@
 export type MessageRole = 'system' | 'user' | 'assistant';
-export type ResponseFormat = 'markdown' | 'mermaid' | 'plain';
+export type ResponseFormat = 'markdown' | 'mermaid' | 'plain' | 'loading';
 export type ResponseType = 'content' | 'error' | 'complete';
 
 export interface ChatPrompt {
   userInput: string;
   systemPrompt: string;
   model: string;
-  patternName: string;
+  patternName?: string;
+  strategyName?: string; // Optional strategy name to prepend strategy prompt
 }
 
 export interface ChatConfig {
@@ -28,6 +29,7 @@ export interface ChatRequest {
 export interface Message {
   role: MessageRole;
   content: string;
+  format?: ResponseFormat;
 }
 
 export interface ChatState {
