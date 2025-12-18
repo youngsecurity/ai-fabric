@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/danielmiessler/fabric/internal/i18n"
 	"github.com/danielmiessler/fabric/internal/plugins/template"
 	"github.com/danielmiessler/fabric/internal/util"
 )
@@ -128,7 +129,16 @@ func (o *PatternsEntity) getFromDB(name string) (ret *Pattern, err error) {
 
 	var pattern []byte
 	if pattern, err = os.ReadFile(patternPath); err != nil {
-		return
+		// Check if the patterns directory is empty to provide helpful error message
+		if os.IsNotExist(err) {
+			var entries []os.DirEntry
+			entries, _ = os.ReadDir(o.Dir)
+			if len(entries) == 0 || (len(entries) == 1 && entries[0].Name() == "loaded") {
+				// Patterns directory is empty or only has 'loaded' file
+				return nil, fmt.Errorf(i18n.T("pattern_not_found_no_patterns"), name)
+			}
+		}
+		return nil, fmt.Errorf(i18n.T("pattern_not_found_list_available"), name)
 	}
 
 	patternStr := string(pattern)
