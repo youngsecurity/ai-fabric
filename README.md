@@ -38,6 +38,7 @@
 [Philosophy](#philosophy) •
 [Installation](#installation) •
 [Usage](#usage) •
+[REST API](#rest-api-server) •
 [Examples](#examples) •
 [Just Use the Patterns](#just-use-the-patterns) •
 [Custom Patterns](#custom-patterns) •
@@ -170,6 +171,7 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
   - [Usage](#usage)
     - [Debug Levels](#debug-levels)
     - [Extensions](#extensions)
+  - [REST API Server](#rest-api-server)
   - [Our approach to prompting](#our-approach-to-prompting)
   - [Examples](#examples)
   - [Just use the Patterns](#just-use-the-patterns)
@@ -299,7 +301,7 @@ docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:l
 # Use Fabric with your patterns
 docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest -p summarize
 
-# Run the REST API server
+# Run the REST API server (see REST API Server section)
 docker run --rm -it -p 8080:8080 -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest --serve
 ```
 
@@ -720,6 +722,25 @@ Use the `--debug` flag to control runtime logging:
 Fabric supports extensions that can be called within patterns. See the [Extension Guide](internal/plugins/template/Examples/README.md) for complete documentation.
 
 **Important:** Extensions only work within pattern files, not via direct stdin. See the guide for details and examples.
+
+## REST API Server
+
+Fabric includes a built-in REST API server that exposes all core functionality over HTTP. Start the server with:
+
+```bash
+fabric --serve
+```
+
+The server provides endpoints for:
+
+- Chat completions with streaming responses
+- Pattern management (create, read, update, delete)
+- Context and session management
+- Model and vendor listing
+- YouTube transcript extraction
+- Configuration management
+
+For complete endpoint documentation, authentication setup, and usage examples, see [REST API Documentation](docs/rest-api.md).
 
 ## Our approach to prompting
 
