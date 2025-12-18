@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.350 (2025-12-18)
+
+### PR [#1880](https://github.com/danielmiessler/Fabric/pull/1880) by [ksylvan](https://github.com/ksylvan): docs: add REST API server section and new endpoint reference
+
+- Add README table-of-contents link for REST API
+- Document REST API server startup and capabilities
+- Add endpoint overview for chat, patterns, contexts
+- Describe sessions management and model listing endpoints
+- Provide curl examples for key API workflows
+
+### PR [#1884](https://github.com/danielmiessler/Fabric/pull/1884) by [ksylvan](https://github.com/ksylvan): Implement interactive Swagger API documentation and automated OpenAPI specification generation
+
+- Add Swagger UI at `/swagger/index.html` endpoint
+- Generate OpenAPI spec files (JSON and YAML)
+- Document chat, patterns, and models endpoints
+- Update contributing guide with Swagger annotation instructions
+- Configure authentication bypass for Swagger documentation
+
 ## v1.4.349 (2025-12-16)
 
 ### PR [#1877](https://github.com/danielmiessler/Fabric/pull/1877) by [ksylvan](https://github.com/ksylvan): modernize: update GitHub Actions and modernize Go code

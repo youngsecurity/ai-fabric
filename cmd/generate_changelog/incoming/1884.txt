@@ -1,7 +1,0 @@
-### PR [#1884](https://github.com/danielmiessler/Fabric/pull/1884) by [ksylvan](https://github.com/ksylvan): Implement interactive Swagger API documentation and automated OpenAPI specification generation
-
-- Add Swagger UI at `/swagger/index.html` endpoint
-- Generate OpenAPI spec files (JSON and YAML)
-- Document chat, patterns, and models endpoints
-- Update contributing guide with Swagger annotation instructions
-- Configure authentication bypass for Swagger documentation
