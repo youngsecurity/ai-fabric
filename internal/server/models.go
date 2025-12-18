@@ -17,6 +17,15 @@ func NewModelsHandler(r *gin.Engine, vendorManager *ai.VendorsManager) {
 	r.GET("/models/names", handler.GetModelNames)
 }
 
+// GetModelNames godoc
+// @Summary List all available models
+// @Description Get a list of all available AI models grouped by vendor
+// @Tags models
+// @Produce json
+// @Success 200 {object} map[string]interface{} "Returns models (array) and vendors (map)"
+// @Failure 500 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /models/names [get]
 func (h *ModelsHandler) GetModelNames(c *gin.Context) {
 	vendorsModels, err := h.vendorManager.GetModels()
 	if err != nil {
