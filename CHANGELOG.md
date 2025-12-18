@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.351 (2025-12-18)
+
+### PR [#1882](https://github.com/danielmiessler/Fabric/pull/1882) by [bvandevliet](https://github.com/bvandevliet): Added yt-dlp package to docker image
+
+- Added yt-dlp package to docker image.
+
 ## v1.4.350 (2025-12-18)
 
 ### PR [#1880](https://github.com/danielmiessler/Fabric/pull/1880) by [ksylvan](https://github.com/ksylvan): docs: add REST API server section and new endpoint reference
