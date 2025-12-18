@@ -74,6 +74,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.350](https://github.com/danielmiessler/fabric/releases/tag/v1.4.350) (Dec 18, 2025) — **Interactive API Documentation**: Adds Swagger/OpenAPI UI at `/swagger/index.html` with comprehensive REST API documentation, enhanced developer guides, and improved endpoint discoverability for easier integration.
 - [v1.4.338](https://github.com/danielmiessler/fabric/releases/tag/v1.4.338) (Dec 4, 2025) — Add Abacus vendor support for Chat-LLM
   models (see [RouteLLM APIs](https://abacus.ai/app/route-llm-apis)).
 - [v1.4.337](https://github.com/danielmiessler/fabric/releases/tag/v1.4.337) (Dec 4, 2025) — Add "Z AI" vendor support. See the [Z AI overview](https://docs.z.ai/guides/overview/overview) page for more details.
