@@ -18,10 +18,27 @@ Test it:
 curl http://localhost:8080/patterns/names
 ```
 
+## Interactive API Documentation
+
+Fabric includes Swagger/OpenAPI documentation with an interactive UI:
+
+- **Swagger UI**: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+- **OpenAPI JSON**: [http://localhost:8080/swagger/doc.json](http://localhost:8080/swagger/doc.json)
+- **OpenAPI YAML**: [http://localhost:8080/swagger/swagger.yaml](http://localhost:8080/swagger/swagger.yaml)
+
+The Swagger UI lets you:
+
+- Browse all available endpoints
+- View request/response schemas
+- Test API calls directly in your browser
+- See authentication requirements
+
+**Note:** Swagger documentation endpoints are publicly accessible even when API key authentication is enabled. Only the actual API endpoints require authentication
+
 ## Server Options
 
 | Flag | Description | Default |
-|------|-------------|---------|
+| ------ | ------------- | --------- |
 | `--serve` | Start the REST API server | - |
 | `--address` | Server address and port | `:8080` |
 | `--api-key` | Enable API key authentication | (none) |
@@ -132,7 +149,7 @@ curl -X POST http://localhost:8080/chat \
 Manage reusable AI prompts.
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
+| -------- | ---------- | ------------- |
 | `GET` | `/patterns/names` | List all pattern names |
 | `GET` | `/patterns/:name` | Get pattern content |
 | `GET` | `/patterns/exists/:name` | Check if pattern exists |
@@ -171,7 +188,7 @@ curl -X POST http://localhost:8080/patterns/my_custom_pattern \
 Manage context snippets that prepend to prompts.
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
+| -------- | ---------- | ------------- |
 | `GET` | `/contexts/names` | List all context names |
 | `GET` | `/contexts/:name` | Get context content |
 | `GET` | `/contexts/exists/:name` | Check if context exists |
@@ -184,7 +201,7 @@ Manage context snippets that prepend to prompts.
 Manage chat conversation history.
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
+| -------- | ---------- | ------------- |
 | `GET` | `/sessions/names` | List all session names |
 | `GET` | `/sessions/:name` | Get session messages (JSON array) |
 | `GET` | `/sessions/exists/:name` | Check if session exists |

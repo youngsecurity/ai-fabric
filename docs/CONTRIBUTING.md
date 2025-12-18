@@ -165,6 +165,79 @@ Example output here
 - Include usage examples
 - Keep documentation current
 
+### REST API Documentation
+
+When adding or modifying REST API endpoints, you must update the Swagger documentation:
+
+**1. Add Swagger annotations to your handler:**
+
+```go
+// HandlerName godoc
+// @Summary Short description of what this endpoint does
+// @Description Detailed description of the endpoint's functionality
+// @Tags category-name
+// @Accept json
+// @Produce json
+// @Param name path string true "Parameter description"
+// @Param body body RequestType true "Request body description"
+// @Success 200 {object} ResponseType "Success description"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Server error"
+// @Security ApiKeyAuth
+// @Router /endpoint/path [get]
+func (h *Handler) HandlerName(c *gin.Context) {
+    // Implementation
+}
+```
+
+**2. Regenerate Swagger documentation:**
+
+```bash
+# Install swag CLI if you haven't already
+go install github.com/swaggo/swag/cmd/swag@latest
+
+# Generate updated documentation
+swag init -g internal/server/serve.go -o docs
+```
+
+**3. Commit the generated files:**
+
+The following files will be updated and should be committed:
+
+- `docs/swagger.json`
+- `docs/swagger.yaml`
+- `docs/docs.go`
+
+**4. Test your changes:**
+
+Start the server and verify your endpoint appears in Swagger UI:
+
+```bash
+go run ./cmd/fabric --serve
+# Open http://localhost:8080/swagger/index.html
+```
+
+**Examples to follow:**
+
+- Chat endpoint: `internal/server/chat.go:58-68`
+- Patterns endpoint: `internal/server/patterns.go:36-45`
+- Models endpoint: `internal/server/models.go:20-28`
+
+**Common annotation tags:**
+
+- `@Summary` - One-line description (required)
+- `@Description` - Detailed explanation
+- `@Tags` - Logical grouping (e.g., "patterns", "chat", "models")
+- `@Accept` - Input content type (e.g., "json")
+- `@Produce` - Output content type (e.g., "json", "text/event-stream")
+- `@Param` - Request parameters (path, query, body)
+- `@Success` - Successful response (include status code and type)
+- `@Failure` - Error responses
+- `@Security` - Authentication requirement (use "ApiKeyAuth" for API key)
+- `@Router` - Endpoint path and HTTP method
+
+For complete Swagger annotation syntax, see the [swaggo documentation](https://github.com/swaggo/swag#declarative-comments-format)
+
 ## Getting Help
 
 - Check existing issues first

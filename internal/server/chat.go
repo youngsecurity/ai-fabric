@@ -55,6 +55,17 @@ func NewChatHandler(r *gin.Engine, registry *core.PluginRegistry, db *fsdb.Db) *
 	return handler
 }
 
+// HandleChat godoc
+// @Summary Stream chat completions
+// @Description Stream AI responses using Server-Sent Events (SSE)
+// @Tags chat
+// @Accept json
+// @Produce text/event-stream
+// @Param request body ChatRequest true "Chat request with prompts and options"
+// @Success 200 {object} StreamResponse "Streaming response"
+// @Failure 400 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /chat [post]
 func (h *ChatHandler) HandleChat(c *gin.Context) {
 	var request ChatRequest
 
