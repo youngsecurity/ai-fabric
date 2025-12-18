@@ -99,13 +99,26 @@ Stream AI responses using Server-Sent Events (SSE).
 
 **Prompt Fields:**
 
-- `userInput` - Your message or question
-- `vendor` - AI provider: `openai`, `anthropic`, `gemini`, `ollama`, etc.
-- `model` - Model name: `gpt-4o`, `claude-sonnet-4.5`, `gemini-2.0-flash-exp`, etc.
-- `patternName` - Pattern to apply (optional, from `~/.config/fabric/patterns/`)
-- `contextName` - Context to prepend (optional, from `~/.config/fabric/contexts/`)
-- `strategyName` - Strategy to use (optional, from `~/.config/fabric/strategies/`)
-- `variables` - Variable substitutions for patterns (optional, e.g., `{"role": "expert"}`)
+| Field | Required | Default | Description |
+| ------- | ---------- | --------- | ------------- |
+| `userInput` | **Yes** | - | Your message or question |
+| `vendor` | **Yes** | - | AI provider: `openai`, `anthropic`, `gemini`, `ollama`, etc. |
+| `model` | **Yes** | - | Model name: `gpt-4o`, `claude-sonnet-4.5`, `gemini-2.0-flash-exp`, etc. |
+| `patternName` | No | `""` | Pattern to apply (from `~/.config/fabric/patterns/`) |
+| `contextName` | No | `""` | Context to prepend (from `~/.config/fabric/contexts/`) |
+| `strategyName` | No | `""` | Strategy to use (from `~/.config/fabric/strategies/`) |
+| `variables` | No | `{}` | Variable substitutions for patterns (e.g., `{"role": "expert"}`) |
+
+**Chat Options:**
+
+| Field | Required | Default | Description |
+| ------- | ---------- | --------- | ------------- |
+| `language` | No | `"en"` | Language code for responses |
+| `temperature` | No | `0.7` | Randomness (0.0-1.0) |
+| `topP` | No | `0.9` | Nucleus sampling (0.0-1.0) |
+| `frequencyPenalty` | No | `0.0` | Reduce repetition (-2.0 to 2.0) |
+| `presencePenalty` | No | `0.0` | Encourage new topics (-2.0 to 2.0) |
+| `thinking` | No | `0` | Reasoning level (0=off, or numeric for tokens) |
 
 **Response:**
 
@@ -300,6 +313,108 @@ Returns API keys and URLs for all configured vendors.
 ```
 
 Updates `~/.config/fabric/.env` with new values.
+
+## Complete Workflow Examples
+
+### Example: Summarize a YouTube Video
+
+This example shows how to extract a YouTube transcript and summarize it using the `youtube_summary` pattern. This requires two API calls:
+
+#### Step 1: Extract the transcript
+
+```bash
+curl -X POST http://localhost:8080/youtube/transcript \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://youtube.com/watch?v=dQw4w9WgXcQ",
+    "timestamps": false
+  }' > transcript.json
+```
+
+Response:
+
+```json
+{
+  "title": "Rick Astley - Never Gonna Give You Up (Official Video)",
+  "transcript": "We're no strangers to love. You know the rules and so do I..."
+}
+```
+
+#### Step 2: Summarize the transcript
+
+Extract the transcript text and send it to the chat endpoint with the `youtube_summary` pattern:
+
+```bash
+# Extract transcript text from JSON
+TRANSCRIPT=$(cat transcript.json | jq -r '.transcript')
+
+# Send to chat endpoint with pattern
+curl -X POST http://localhost:8080/chat \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"prompts\": [{
+      \"userInput\": \"$TRANSCRIPT\",
+      \"vendor\": \"openai\",
+      \"model\": \"gpt-4o\",
+      \"patternName\": \"youtube_summary\"
+    }]
+  }"
+```
+
+#### Combined one-liner (using jq)
+
+```bash
+curl -s -X POST http://localhost:8080/youtube/transcript \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://youtube.com/watch?v=dQw4w9WgXcQ", "timestamps": false}' | \
+jq -r '.transcript' | \
+xargs -I {} curl -X POST http://localhost:8080/chat \
+  -H "Content-Type: application/json" \
+  -d "{\"prompts\":[{\"userInput\":\"{}\",\"vendor\":\"openai\",\"model\":\"gpt-4o\",\"patternName\":\"youtube_summary\"}]}"
+```
+
+#### Alternative: Using a script
+
+```bash
+#!/bin/bash
+YOUTUBE_URL="https://youtube.com/watch?v=dQw4w9WgXcQ"
+API_BASE="http://localhost:8080"
+
+# Step 1: Get transcript
+echo "Extracting transcript..."
+TRANSCRIPT=$(curl -s -X POST "$API_BASE/youtube/transcript" \
+  -H "Content-Type: application/json" \
+  -d "{\"url\":\"$YOUTUBE_URL\",\"timestamps\":false}" | jq -r '.transcript')
+
+# Step 2: Summarize with pattern
+echo "Generating summary..."
+curl -X POST "$API_BASE/chat" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"prompts\": [{
+      \"userInput\": $(echo "$TRANSCRIPT" | jq -Rs .),
+      \"vendor\": \"openai\",
+      \"model\": \"gpt-4o\",
+      \"patternName\": \"youtube_summary\"
+    }]
+  }"
+```
+
+#### Comparison with CLI
+
+The CLI combines these steps automatically:
+
+```bash
+# CLI version (single command)
+fabric -y "https://youtube.com/watch?v=dQw4w9WgXcQ" --pattern youtube_summary
+```
+
+The API provides more flexibility by separating transcript extraction and summarization, allowing you to:
+
+- Extract the transcript once and process it multiple ways
+- Apply different patterns to the same transcript
+- Store the transcript for later use
+- Use different models or vendors for summarization
 
 ## Docker Usage
 
