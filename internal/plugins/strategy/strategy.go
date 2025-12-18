@@ -103,17 +103,20 @@ func (sm *StrategiesManager) Setup() (err error) {
 	if err = sm.PopulateDB(); err != nil {
 		return
 	}
+	// Reload strategies after downloading so IsConfigured() reflects the new state
+	sm.Strategies, _ = LoadAllFiles()
 	return
 }
 
 // PopulateDB downloads strategies from the internet and populates the strategies folder
 func (sm *StrategiesManager) PopulateDB() (err error) {
-	stageDir, _ := getStrategyDir()
-	fmt.Printf("Downloading strategies and Populating %s...\n", stageDir)
+	strategyDir, _ := getStrategyDir()
+	fmt.Printf("Downloading strategies and Populating %s...\n", strategyDir)
 	fmt.Println()
 	if err = sm.gitCloneAndCopy(); err != nil {
 		return
 	}
+	fmt.Printf("✅ Successfully downloaded and installed strategies to %s\n", strategyDir)
 	return
 }
 
@@ -130,6 +133,8 @@ func (sm *StrategiesManager) gitCloneAndCopy() (err error) {
 		return fmt.Errorf("failed to create strategies directory: %w", err)
 	}
 
+	fmt.Printf("Cloning repository %s (path: %s)...\n", sm.DefaultGitRepoUrl.Value, sm.DefaultFolder.Value)
+
 	// Use the helper to fetch files
 	err = githelper.FetchFilesFromRepo(githelper.FetchOptions{
 		RepoURL:         sm.DefaultGitRepoUrl.Value,
@@ -139,6 +144,18 @@ func (sm *StrategiesManager) gitCloneAndCopy() (err error) {
 	})
 	if err != nil {
 		return fmt.Errorf("failed to download strategies: %w", err)
+	}
+
+	// Count downloaded strategies
+	entries, readErr := os.ReadDir(strategyDir)
+	if readErr == nil {
+		strategyCount := 0
+		for _, entry := range entries {
+			if !entry.IsDir() && filepath.Ext(entry.Name()) == ".json" {
+				strategyCount++
+			}
+		}
+		fmt.Printf("Downloaded %d strategies\n", strategyCount)
 	}
 
 	return nil
