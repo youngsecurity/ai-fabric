@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.4.352 (2025-12-18)
+
+### PR [#1886](https://github.com/danielmiessler/Fabric/pull/1886) by [ksylvan](https://github.com/ksylvan): Enhanced Onboarding and Setup Experience
+
+- User Experience: implement automated first-time setup and improved configuration validation
+- Add automated first-time setup for patterns and strategies
+- Implement configuration validation to warn about missing required components
+- Update setup menu to group plugins into required and optional
+- Provide helpful guidance when no patterns are found in listing
+
+### Direct commits
+
+- Chore: update README with new interactive Swagger available in v.1.4.350
+
 ## v1.4.351 (2025-12-18)
 
 ### PR [#1882](https://github.com/danielmiessler/Fabric/pull/1882) by [bvandevliet](https://github.com/bvandevliet): Added yt-dlp package to docker image
