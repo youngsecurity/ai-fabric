@@ -1,4 +1,0 @@
-### PR [#1887](https://github.com/danielmiessler/Fabric/pull/1887) by [bvandevliet](https://github.com/bvandevliet): feat: correct video title and added description to yt transcript api response
-
-- Feat: correct video title (instead of id) and added description to yt transcript api response
-- Updated API documentation.

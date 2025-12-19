@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.353 (2025-12-19)
+
+### PR [#1887](https://github.com/danielmiessler/Fabric/pull/1887) by [bvandevliet](https://github.com/bvandevliet): feat: correct video title and added description to yt transcript api response
+
+- Feat: correct video title (instead of id) and added description to yt transcript api response
+- Updated API documentation.
+
 ## v1.4.352 (2025-12-18)
 
 ### PR [#1886](https://github.com/danielmiessler/Fabric/pull/1886) by [ksylvan](https://github.com/ksylvan): Enhanced Onboarding and Setup Experience
