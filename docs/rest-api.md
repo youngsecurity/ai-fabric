@@ -278,7 +278,9 @@ Extract transcripts from YouTube videos.
 
 ```json
 {
+  "videoId": "Video ID",
   "title": "Video Title",
+  "description" : "Video description...",
   "transcript": "Full transcript text..."
 }
 ```
@@ -335,7 +337,9 @@ Response:
 
 ```json
 {
+  "videoId": "dQw4w9WgXcQ",
   "title": "Rick Astley - Never Gonna Give You Up (Official Video)",
+  "description": "The official video for “Never Gonna Give You Up” by Rick Astley...",
   "transcript": "We're no strangers to love. You know the rules and so do I..."
 }
 ```

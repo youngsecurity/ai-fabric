@@ -19,8 +19,10 @@ type YouTubeRequest struct {
 }
 
 type YouTubeResponse struct {
-	Transcript string `json:"transcript"`
-	Title      string `json:"title"`
+	Transcript  string `json:"transcript"`
+	VideoId     string `json:"videoId"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 func NewYouTubeHandler(r *gin.Engine, registry *core.PluginRegistry) *YouTubeHandler {
@@ -55,6 +57,12 @@ func (h *YouTubeHandler) Transcript(c *gin.Context) {
 		return
 	}
 
+	var metadata *youtube.VideoMetadata
+	if metadata, err = h.yt.GrabMetadata(videoID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	var transcript string
 	if req.Timestamps {
 		transcript, err = h.yt.GrabTranscriptWithTimestamps(videoID, language)
@@ -66,5 +74,5 @@ func (h *YouTubeHandler) Transcript(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, YouTubeResponse{Transcript: transcript, Title: videoID})
+	c.JSON(http.StatusOK, YouTubeResponse{Transcript: transcript, VideoId: videoID, Title: metadata.Title, Description: metadata.Description})
 }
