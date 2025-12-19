@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.354 (2025-12-19)
+
+### PR [#1889](https://github.com/danielmiessler/Fabric/pull/1889) by [ksylvan](https://github.com/ksylvan): docs: Add a YouTube transcript endpoint to the Swagger UI
+
+- Add `/youtube/transcript` POST endpoint to Swagger docs
+- Define `YouTubeRequest` schema with URL, language, timestamps fields
+- Define `YouTubeResponse` schema with transcript and metadata fields
+- Add API security requirement using ApiKeyAuth
+- Document 200, 400, and 500 response codes
+
 ## v1.4.353 (2025-12-19)
 
 ### PR [#1887](https://github.com/danielmiessler/Fabric/pull/1887) by [bvandevliet](https://github.com/bvandevliet): feat: correct video title and added description to yt transcript api response
