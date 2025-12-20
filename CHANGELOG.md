@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.355 (2025-12-20)
+
+### PR [#1890](https://github.com/danielmiessler/Fabric/pull/1890) by [ksylvan](https://github.com/ksylvan): Bundle yt-dlp with fabric in Nix flake, introduce slim variant
+
+- Added yt-dlp bundling with fabric package and introduced fabric-slim variant
+- Renamed original fabric package to fabricSlim and created new fabric package as symlinkJoin of fabricSlim and yt-dlp
+- Added fabric-slim output for the slim variant and updated default package to point to bundled fabric
+- Enhanced fabric meta description to note yt-dlp inclusion and set mainProgram to fabric in bundled package
+- Added wrapper for fabric binary to include PATH in execution environment
+
 ## v1.4.354 (2025-12-19)
 
 ### PR [#1889](https://github.com/danielmiessler/Fabric/pull/1889) by [ksylvan](https://github.com/ksylvan): docs: Add a YouTube transcript endpoint to the Swagger UI
