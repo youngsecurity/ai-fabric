@@ -1,7 +1,0 @@
-### PR [#1897](https://github.com/danielmiessler/Fabric/pull/1897) by [ksylvan](https://github.com/ksylvan): feat: add MiniMax provider support to OpenAI compatible plugin
-
-- Add MiniMax provider support to OpenAI compatible plugin
-- Add MiniMax provider configuration to ProviderMap
-- Set MiniMax base URL to api.minimaxi.com/v1
-- Configure MiniMax with ImplementsResponses as false
-- Add test case for MiniMax provider validation

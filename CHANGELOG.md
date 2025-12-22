@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.4.357 (2025-12-22)
+
+### PR [#1897](https://github.com/danielmiessler/Fabric/pull/1897) by [ksylvan](https://github.com/ksylvan): feat: add MiniMax provider support to OpenAI compatible plugin
+
+- Add MiniMax provider support to OpenAI compatible plugin
+- Add MiniMax provider configuration to ProviderMap
+- Set MiniMax base URL to api.minimaxi.com/v1
+- Configure MiniMax with ImplementsResponses as false
+- Add test case for MiniMax provider validation
+
+### Direct commits
+
+- Docs: add v1.4.356 release note highlighting complete i18n support
+
+- Add v1.4.356 entry to Recent Major Features list
+- Highlight full setup prompt i18n across 10 languages
+
+- Note intelligent environment variable handling for consistency
+
 ## v1.4.356 (2025-12-22)
 
 ### PR [#1895](https://github.com/danielmiessler/Fabric/pull/1895) by [ksylvan](https://github.com/ksylvan): Localize setup process and add funding configuration
