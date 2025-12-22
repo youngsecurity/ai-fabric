@@ -165,6 +165,11 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "http://localhost:4000",
 		ImplementsResponses: false,
 	},
+	"MiniMax": {
+		Name:                "MiniMax",
+		BaseURL:             "https://api.minimaxi.com/v1",
+		ImplementsResponses: false,
+	},
 	"Mistral": {
 		Name:                "Mistral",
 		BaseURL:             "https://api.mistral.ai/v1",
