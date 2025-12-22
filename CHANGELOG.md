@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.356 (2025-12-22)
+
+### PR [#1895](https://github.com/danielmiessler/Fabric/pull/1895) by [ksylvan](https://github.com/ksylvan): Localize setup process and add funding configuration
+
+- Localize setup prompts and error messages across multiple languages
+- Implement helper for localized questions with static environment keys
+- Update environment variable builder to handle hyphenated plugin names
+- Replace hardcoded console output with localized i18n translation strings
+- Add GitHub and Buy Me a Coffee funding configuration
+
 ## v1.4.355 (2025-12-20)
 
 ### PR [#1890](https://github.com/danielmiessler/Fabric/pull/1890) by [ksylvan](https://github.com/ksylvan): Bundle yt-dlp with fabric in Nix flake, introduce slim variant
