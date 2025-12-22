@@ -320,7 +320,7 @@ func (o *PluginRegistry) runVendorSetup() (err error) {
 
 // runInteractiveSetup runs the standard interactive setup menu
 func (o *PluginRegistry) runInteractiveSetup() (err error) {
-	setupQuestion := plugins.NewSetupQuestion("Enter the number of the plugin to setup")
+	setupQuestion := plugins.NewSetupQuestion(i18n.T("setup_plugin_prompt"))
 	groupsPlugins := util.NewGroupsItemsSelector(i18n.T("setup_available_plugins"),
 		func(plugin plugins.Plugin) string {
 			var configuredLabel string
