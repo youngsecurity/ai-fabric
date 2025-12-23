@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.360 (2025-12-23)
+
+### PR [#1903](https://github.com/danielmiessler/Fabric/pull/1903) by [ksylvan](https://github.com/ksylvan): Update project dependencies and core SDK versions
+
+- Update project dependencies and core SDK versions
+- Upgrade AWS SDK v2 components to latest stable versions
+- Update Ollama library to version 0.13.5 for improvements
+- Bump Google API and GenAI dependencies to newer releases
+- Refresh Cobra CLI framework and Pflag to latest versions
+
 ## v1.4.359 (2025-12-23)
 
 ### PR [#1902](https://github.com/danielmiessler/Fabric/pull/1902) by [ksylvan](https://github.com/ksylvan): Code Cleanup and Simplification
