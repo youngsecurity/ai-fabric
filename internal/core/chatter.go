@@ -53,13 +53,9 @@ func (o *Chatter) Send(request *domain.ChatRequest, opts *domain.ChatOptions) (s
 		return
 	}
 
-	if opts.Model == "" {
-		opts.Model = o.model
-	} else {
-		// Ensure opts.Model uses the normalized name from o.model if they refer to the same model
-		// This handles cases where user provides "GPT-5" but we've normalized it to "gpt-5"
-		opts.Model = o.model
-	}
+	// Always use the normalized model name from the Chatter
+	// This handles cases where user provides "GPT-5" but we've normalized it to "gpt-5"
+	opts.Model = o.model
 
 	if opts.ModelContextLength == 0 {
 		opts.ModelContextLength = o.modelContextLength
