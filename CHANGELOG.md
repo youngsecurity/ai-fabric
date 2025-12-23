@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.359 (2025-12-23)
+
+### PR [#1902](https://github.com/danielmiessler/Fabric/pull/1902) by [ksylvan](https://github.com/ksylvan): Code Cleanup and Simplification
+
+- Chore: simplify error formatting and clean up model assignment logic
+
+- Remove redundant fmt.Sprintf calls from error formatting logic
+- Simplify model assignment to always use normalized model names
+
+- Remove unused variadic parameter from the VendorsManager Clear method
+
 ## v1.4.358 (2025-12-23)
 
 ### PR [#1901](https://github.com/danielmiessler/Fabric/pull/1901) by [orbisai0security](https://github.com/orbisai0security): sexurity fix: Ollama update: CVE-2025-63389
