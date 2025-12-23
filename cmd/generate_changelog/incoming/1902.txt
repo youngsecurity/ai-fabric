@@ -1,0 +1,8 @@
+### PR [#1902](https://github.com/danielmiessler/Fabric/pull/1902) by [ksylvan](https://github.com/ksylvan): Code Cleanup and Simplification
+
+- Chore: simplify error formatting and clean up model assignment logic
+
+- Remove redundant fmt.Sprintf calls from error formatting logic
+- Simplify model assignment to always use normalized model names
+
+- Remove unused variadic parameter from the VendorsManager Clear method
