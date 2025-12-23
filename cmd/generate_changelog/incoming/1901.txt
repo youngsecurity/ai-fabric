@@ -1,0 +1,3 @@
+### PR [#1901](https://github.com/danielmiessler/Fabric/pull/1901) by [orbisai0security](https://github.com/orbisai0security): sexurity fix: Ollama update: CVE-2025-63389
+
+- Fix: resolve critical vulnerability CVE-2025-63389
