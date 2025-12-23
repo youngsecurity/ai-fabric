@@ -272,8 +272,8 @@ schema = 3
     version = "v2.6.0"
     hash = "sha256-UrSECFbpCIg5avJ+f3LkJy/ncZFHa4q8sDqDIQ3YZJM="
   [mod."github.com/ollama/ollama"]
-    version = "v0.11.7"
-    hash = "sha256-3Wn1JWmil0aQQ2I/r398HbnUsi8ADoroqNyPziuxn/c="
+    version = "v0.12.4"
+    hash = "sha256-5Ubp36Ywbt3TtIhqhHkrm+xo1/RT1EePexQzF84jeVo="
   [mod."github.com/openai/openai-go"]
     version = "v1.12.0"
     hash = "sha256-JHLlKvDwERPf728GUXBsKU58ODgCxcxEe9TKJTGAG1w="

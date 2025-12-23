@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.358 (2025-12-23)
+
+### PR [#1901](https://github.com/danielmiessler/Fabric/pull/1901) by [orbisai0security](https://github.com/orbisai0security): sexurity fix: Ollama update: CVE-2025-63389
+
+- Fix: resolve critical vulnerability CVE-2025-63389 (update Ollama Go library)
+
 ## v1.4.357 (2025-12-22)
 
 ### PR [#1897](https://github.com/danielmiessler/Fabric/pull/1897) by [ksylvan](https://github.com/ksylvan): feat: add MiniMax provider support to OpenAI compatible plugin
