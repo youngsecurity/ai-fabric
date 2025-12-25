@@ -65,7 +65,9 @@ func (o *PatternsEntity) loadPattern(source string) (pattern *Pattern, err error
 		}
 
 		// Use the resolved absolute path to get the pattern
-		pattern, _ = o.getFromFile(absPath)
+		if pattern, err = o.getFromFile(absPath); err != nil {
+			return nil, fmt.Errorf("could not load pattern from file %s: %w", absPath, err)
+		}
 	} else {
 		// Otherwise, get the pattern from the database
 		pattern, err = o.getFromDB(source)
