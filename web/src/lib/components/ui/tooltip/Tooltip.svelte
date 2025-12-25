@@ -1,53 +1,61 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { calculateTooltipPosition, formatPositionStyle, type TooltipPosition } from './positioning';
+
   export let text: string;
-  export let position: 'top' | 'bottom' | 'left' | 'right' = 'top';
+  // biome-ignore lint/style/useConst: Svelte props must use 'let' even when not reassigned
+  export let position: TooltipPosition = 'top';
 
   let tooltipVisible = false;
+  // eslint-disable-next-line no-unassigned-vars -- Assigned via bind:this in template
   let triggerElement: HTMLDivElement;
-  let tooltipStyle = '';
+  let isBrowser = false;
+  // biome-ignore lint/correctness/noUnusedVariables: Used in template for aria-describedby and id
+  const tooltipId = `tooltip-${Math.random().toString(36).substring(2, 9)}`;
 
-  function calculatePosition() {
-    if (!triggerElement) return;
+  // Reactive tooltip positioning - recalculates when position or element changes
+  $: tooltipStyle = triggerElement && tooltipVisible
+    ? formatPositionStyle(calculateTooltipPosition(triggerElement.getBoundingClientRect(), position))
+    : '';
 
-    const rect = triggerElement.getBoundingClientRect();
-    const gap = 8;
-
-    let top = 0;
-    let left = 0;
-
-    switch (position) {
-      case 'top':
-        top = rect.top - gap;
-        left = rect.left + rect.width / 2;
-        break;
-      case 'bottom':
-        top = rect.bottom + gap;
-        left = rect.left + rect.width / 2;
-        break;
-      case 'left':
-        top = rect.top + rect.height / 2;
-        left = rect.left - gap;
-        break;
-      case 'right':
-        top = rect.top + rect.height / 2;
-        left = rect.right + gap;
-        break;
+  function updatePosition() {
+    if (triggerElement && tooltipVisible) {
+      tooltipStyle = formatPositionStyle(calculateTooltipPosition(triggerElement.getBoundingClientRect(), position));
     }
-
-    tooltipStyle = `top: ${top}px; left: ${left}px;`;
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: Used in template event handlers
   function showTooltip() {
-    calculatePosition();
     tooltipVisible = true;
   }
 
+  // biome-ignore lint/correctness/noUnusedVariables: Used in template event handlers
   function hideTooltip() {
     tooltipVisible = false;
   }
+
+  // Handle window scroll and resize to keep tooltip positioned correctly
+  // Only runs in browser (not during SSR)
+  onMount(() => {
+    isBrowser = true;
+    return () => {
+      if (isBrowser) {
+        window.removeEventListener('scroll', updatePosition, true);
+        window.removeEventListener('resize', updatePosition);
+      }
+    };
+  });
+
+  // Add/remove event listeners reactively when tooltip visibility changes
+  $: if (isBrowser && tooltipVisible) {
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
+  } else if (isBrowser && !tooltipVisible) {
+    window.removeEventListener('scroll', updatePosition, true);
+    window.removeEventListener('resize', updatePosition);
+  }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-mouse-events-have-key-events -->
 <div class="tooltip-container">
   <div
     bind:this={triggerElement}
@@ -56,14 +64,16 @@
     on:mouseleave={hideTooltip}
     on:focusin={showTooltip}
     on:focusout={hideTooltip}
-    role="tooltip"
-    aria-label="Tooltip trigger"
+    aria-describedby={tooltipVisible ? tooltipId : undefined}
+    role="button"
+    tabindex="0"
   >
     <slot />
   </div>
 
   {#if tooltipVisible}
     <div
+      id={tooltipId}
       class="tooltip fixed z-[9999] px-2 py-1 text-xs rounded bg-gray-900/90 text-white whitespace-nowrap shadow-lg backdrop-blur-sm"
       class:top="{position === 'top'}"
       class:bottom="{position === 'bottom'}"
@@ -71,7 +81,6 @@
       class:right="{position === 'right'}"
       style={tooltipStyle}
       role="tooltip"
-      aria-label={text}
     >
       {text}
       <div class="tooltip-arrow" role="presentation" />
