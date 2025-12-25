@@ -3,9 +3,42 @@
   export let position: 'top' | 'bottom' | 'left' | 'right' = 'top';
 
   let tooltipVisible = false;
-  let tooltipElement: HTMLDivElement;
+  let triggerElement: HTMLDivElement;
+  let tooltipStyle = '';
+
+  function calculatePosition() {
+    if (!triggerElement) return;
+
+    const rect = triggerElement.getBoundingClientRect();
+    const gap = 8;
+
+    let top = 0;
+    let left = 0;
+
+    switch (position) {
+      case 'top':
+        top = rect.top - gap;
+        left = rect.left + rect.width / 2;
+        break;
+      case 'bottom':
+        top = rect.bottom + gap;
+        left = rect.left + rect.width / 2;
+        break;
+      case 'left':
+        top = rect.top + rect.height / 2;
+        left = rect.left - gap;
+        break;
+      case 'right':
+        top = rect.top + rect.height / 2;
+        left = rect.right + gap;
+        break;
+    }
+
+    tooltipStyle = `top: ${top}px; left: ${left}px;`;
+  }
 
   function showTooltip() {
+    calculatePosition();
     tooltipVisible = true;
   }
 
@@ -16,7 +49,8 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-mouse-events-have-key-events -->
 <div class="tooltip-container">
-  <div 
+  <div
+    bind:this={triggerElement}
     class="tooltip-trigger"
     on:mouseenter={showTooltip}
     on:mouseleave={hideTooltip}
@@ -27,15 +61,15 @@
   >
     <slot />
   </div>
-  
+
   {#if tooltipVisible}
     <div
-      bind:this={tooltipElement}
-      class="tooltip absolute z-[9999] px-2 py-1 text-xs rounded bg-gray-900/90 text-white whitespace-nowrap shadow-lg backdrop-blur-sm"
+      class="tooltip fixed z-[9999] px-2 py-1 text-xs rounded bg-gray-900/90 text-white whitespace-nowrap shadow-lg backdrop-blur-sm"
       class:top="{position === 'top'}"
       class:bottom="{position === 'bottom'}"
       class:left="{position === 'left'}"
       class:right="{position === 'right'}"
+      style={tooltipStyle}
       role="tooltip"
       aria-label={text}
     >
@@ -57,32 +91,24 @@
 
   .tooltip {
     pointer-events: none;
-    transition: all 150ms ease-in-out;
+    transition: opacity 150ms ease-in-out;
     opacity: 1;
   }
 
   .tooltip.top {
-    bottom: calc(100% + 5px);
-    left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -100%);
   }
 
   .tooltip.bottom {
-    top: calc(100% + 5px);
-    left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 0);
   }
 
   .tooltip.left {
-    right: calc(100% + 5px);
-    top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-100%, -50%);
   }
 
   .tooltip.right {
-    left: calc(100% + 5px);
-    top: 50%;
-    transform: translateY(-50%);
+    transform: translate(0, -50%);
   }
 
   .tooltip-arrow {
