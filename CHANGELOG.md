@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.363 (2025-12-25)
+
+### PR [#1906](https://github.com/danielmiessler/Fabric/pull/1906) by [ksylvan](https://github.com/ksylvan): Code Quality: Optimize HTTP client reuse + simplify error formatting
+
+- Refactor: optimize HTTP client reuse and simplify error formatting
+- Simplify error wrapping by removing redundant Sprintf calls in CLI
+- Pass HTTP client to FetchModelsDirectly to enable connection reuse
+- Store persistent HTTP client instance inside the OpenAI provider struct
+- Update compatible AI providers to match the new function signature
+
 ## v1.4.362 (2025-12-25)
 
 ### PR [#1904](https://github.com/danielmiessler/Fabric/pull/1904) by [majiayu000](https://github.com/majiayu000): fix: resolve WebUI tooltips not rendering due to overflow clipping
