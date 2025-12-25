@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.362 (2025-12-25)
+
+### PR [#1904](https://github.com/danielmiessler/Fabric/pull/1904) by [majiayu000](https://github.com/majiayu000): fix: resolve WebUI tooltips not rendering due to overflow clipping
+
+- Fix: resolve WebUI tooltips not rendering due to overflow clipping by using position: fixed and getBoundingClientRect() to calculate tooltip position dynamically, preventing tooltips from being clipped by parent containers with overflow: hidden
+- Refactor: extract tooltip positioning logic into separate positioning.ts module for better code organization and maintainability
+- Improve accessibility with aria-describedby attributes and unique IDs for better screen reader support
+- Add reactive tooltip position updates on scroll and resize events for dynamic positioning
+- Add SSR safety with isBrowser flag check and comprehensive unit test coverage for the positioning functions
+
 ## v1.4.361 (2025-12-25)
 
 ### PR [#1905](https://github.com/danielmiessler/Fabric/pull/1905) by [majiayu000](https://github.com/majiayu000): fix: optimize oversized logo images reducing package size by 93%
