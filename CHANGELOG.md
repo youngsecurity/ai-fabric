@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.361 (2025-12-25)
+
+### PR [#1905](https://github.com/danielmiessler/Fabric/pull/1905) by [majiayu000](https://github.com/majiayu000): fix: optimize oversized logo images reducing package size by 93%
+
+- Optimize oversized logo images reducing package size by 93%
+- Replace 42MB favicon.png with proper 64x64 PNG (4.7KB)
+- Replace 42MB fabric-logo.png with static PNG from first GIF frame (387KB)
+- Optimize animated GIF from 42MB to 5.4MB (half resolution, 12fps, 128 colors)
+- Update docs/images/fabric-logo-gif.gif with optimized version
+
 ## v1.4.360 (2025-12-23)
 
 ### PR [#1903](https://github.com/danielmiessler/Fabric/pull/1903) by [ksylvan](https://github.com/ksylvan): Update project dependencies and core SDK versions
